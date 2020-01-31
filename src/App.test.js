@@ -1,9 +1,9 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { mount } from 'enzyme';
 import App from './App';
+import { TabComponent } from './Tab';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('contains TabComponent element', () => {
+  const wrapper = mount(<App />);
+  expect(wrapper.find(TabComponent)).toHaveLength(1);
 });
