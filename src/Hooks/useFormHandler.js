@@ -64,10 +64,28 @@ export const useFormHandler = () => {
         return 0 === Object.keys(formErrors).length;
     };
 
-    const handleRegistration = (e) => {
+    const submitRegistration = (e) => {
         e.preventDefault();
 
         if (!validateForm(values)) {
+            return;
+        }
+
+        alert(JSON.stringify(values));
+    };
+
+    const checkUser = values => {
+        return values.email === 'toto@titi.com' && values.password === 'tututu';
+    };
+
+    const submitLogin = (e) => {
+        e.preventDefault();
+
+        if (!checkUser(values)) {
+            setErrors({
+                login: ['Login error'],
+            });
+
             return;
         }
 
@@ -79,7 +97,7 @@ export const useFormHandler = () => {
         errors,
         values,
         handleInputChange,
-        validateForm,
-        handleRegistration
+        submitRegistration,
+        submitLogin,
     }
 };

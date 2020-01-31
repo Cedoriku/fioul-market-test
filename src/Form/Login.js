@@ -12,7 +12,7 @@ const Login = () => {
 
     return (
         <div className="RegisterForm">
-            <form onSubmit={formHandler.handleLogin}>
+            <form onSubmit={formHandler.submitLogin}>
                 <div className={`form-item${isLoginError ? ' has-error' : ''}`}>
                     <label htmlFor="">Email</label>
                     <FormInput type="text" value={formHandler.values.email} onChange={(e) => formHandler.handleInputChange(e, 'email')} />
