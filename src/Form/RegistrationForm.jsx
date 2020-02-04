@@ -1,37 +1,72 @@
 import React from 'react';
 import './RegisterForm.css';
-import { useFormHandler } from '../Hooks';
+import { Form } from "./Elements";
 
 const RegistrationForm = () => {
-    const formHandler = useFormHandler();
-    const isEmailError = undefined !== formHandler.errors.email && formHandler.touched.email;
-    const isPasswordError = undefined !== formHandler.errors.password && formHandler.touched.password;
-    const isConfirmError = undefined !== formHandler.errors.confirm && formHandler.touched.confirm;
+    const fields = [
+        {
+            name: "email",
+            label: "Email",
+            type: "text"
+        },
+        {
+            name: "password",
+            label: "Password",
+            type: "text"
+        },
+        {
+            name: "confirm",
+            label: "Confirm",
+            type: "text"
+        }
+    ];
+    const validateForm = (submittedValues) => {
+        let formErrors = {};
+        if (!submittedValues.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
+            formErrors = {
+                ...formErrors,
+                email: ['You have to provide a valid email.'],
+            };
+        }
+
+        if (submittedValues.password.length < 5 || submittedValues.password.length > 16) {
+            formErrors = {
+                ...formErrors,
+                password: ['Your password must be between 5 and 16 characters length.'],
+            };
+        }
+
+        if (submittedValues.confirm.length < 5 || submittedValues.confirm.length > 16) {
+            formErrors = {
+                ...formErrors,
+                confirm: ['Your password must be between 5 and 16 characters length.'],
+            };
+        }
+
+        if (submittedValues.confirm !== submittedValues.password) {
+            const passwordError = undefined !== formErrors.password
+                ? [
+                    ...formErrors.password,
+                    'Your passwords must match.'
+                ]
+                : ['Your passwords must match'];
+
+            formErrors = {
+                ...formErrors,
+                password: passwordError,
+            };
+        }
+
+        return formErrors;
+    };
 
     return (
-      <div className="RegisterForm">
-        <h1>Registration form</h1>
-        <form onSubmit={formHandler.submitRegistration}>
-          <div className={`form-item${isEmailError ? ' has-error' : ''}`}>
-            <label htmlFor="">Email</label>
-            <input type="text" value={formHandler.values.email} onChange={(e) => formHandler.handleInputChange(e, 'email')} />
-            {isEmailError && <span className="error-message">{formHandler.errors.email.map((err, k) => <span key={k} className="error-item">{err}</span>)}</span>}
-          </div>
-          <div className={`form-item${isPasswordError ? ' has-error' : ''}`}>
-            <label htmlFor="">Password</label>
-            <input type="text" value={formHandler.values.password} onChange={(e) => formHandler.handleInputChange(e, 'password')} />
-            {isPasswordError && <span className="error-message">{formHandler.errors.password.map((err, k) => <span key={k} className="error-item">{err}</span>)}</span>}
-          </div>
-          <div className={`form-item${isConfirmError ? ' has-error' : ''}`}>
-            <label htmlFor="">Confirm</label>
-            <input type="text" value={formHandler.values.confirm} onChange={(e) => formHandler.handleInputChange(e, 'confirm')} />
-            {isConfirmError && <span className="error-message">{formHandler.errors.confirm.map((err, k) => <span key={k} className="error-item">{err}</span>)}</span>}
-          </div>
-          <div className="form-item">
-            <input type="submit" value="Register !" />
-          </div>
-        </form>
-      </div>
+        <div className="RegisterForm">
+            <h1>Registration form</h1>
+            <Form fields={fields}
+                  validation={validateForm}
+                  submitButtonValue={"Register!"}/>
+        </div>
     )
 };
 

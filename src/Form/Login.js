@@ -1,34 +1,48 @@
 import React from 'react';
-import { useFormHandler } from '../Hooks';
 import './RegisterForm.css';
-import {
-    FormInput,
-    SubmitButton
-} from './Style';
+import { Form } from "./Elements";
 
 const Login = () => {
-    const formHandler = useFormHandler();
-    const isLoginError = undefined !== formHandler.errors.login;
+    const fields = [
+        {
+            name: "email",
+            label: "Email",
+            type: "text"
+        },
+        {
+            name: "password",
+            label: "Password",
+            type: "text"
+        },
+    ];
+
+    const checkUser = values => {
+        return values.email === 'toto' && values.password === 'tututu';
+    };
+    const loginCheck = (values) => {
+
+        let formErrors = {};
+
+        if (!checkUser(values)) {
+            formErrors = {
+                form: ['Login error'],
+            };
+        }
+
+        return formErrors;
+    };
 
     return (
-        <div className="RegisterForm">
-            <form onSubmit={formHandler.submitLogin}>
-                <div className={`form-item${isLoginError ? ' has-error' : ''}`}>
-                    <label htmlFor="">Email</label>
-                    <FormInput type="text" value={formHandler.values.email} onChange={(e) => formHandler.handleInputChange(e, 'email')} />
-                </div>
-                <div className={`form-item${isLoginError ? ' has-error' : ''}`}>
-                    <label htmlFor="">Password</label>
-                    <FormInput type="text" value={formHandler.values.password} onChange={(e) => formHandler.handleInputChange(e, 'password')} />
-                </div>
-                <div className={`form-item${isLoginError ? ' has-error' : ''}`}>
+        <div className="LoginForm">
+            <Form fields={fields}
+                  validation={loginCheck}
+                  submitButtonValue={'Me connecter'}>
+
+                <div className="form-item">
                     <a href="/#" >Mot de passe oublié ?</a>
                 </div>
-                <div className="form-item">
-                    {isLoginError && <span className="error-message">{formHandler.errors.login.map((err, k) => <span key={k} className="error-item">{err}</span>)}</span>}
-                    <SubmitButton type="submit" value="Me connecter" />
-                </div>
-            </form>
+
+            </Form>
         </div>
     )
 };
