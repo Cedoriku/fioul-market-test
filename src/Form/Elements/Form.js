@@ -16,22 +16,22 @@ const Form = ({ fields, submitButtonValue, validation, children }) => {
         submit
     } = useFormHandler(fields);
 
-    fields = fields.map(field => ({
-        ...field,
-        value: values[field.name],
-        touched: touched[field.name],
-        errors: errors[field.name]
-    }));
-
     const isFormError = undefined !== errors.form;
 
     return (
         <form onSubmit={(e) => submit(e, validation)}>
 
             {fields.map(
-                (field, i) => <Field field={field} changeHandler={handleInputChange} key={i}/>
+                (field, i) => <Field key={i}
+                                     {...field}
+                                     value={values[field.name]}
+                                     touched={touched[field.name]}
+                                     errors= {errors[field.name]}
+                                     changeHandler={handleInputChange}
+                            />
             )}
 
+            {/* Additional form content */}
             {children}
 
             <div className={`form-item${isFormError ? ' has-error' : ''}`}>

@@ -4,17 +4,15 @@ import {
     FormInput,
 } from './Style';
 
-const Field = (
-    {field: {
+const Field = ({
         name,
         label,
         type,
         value,
         touched,
-        errors
-    },
-    changeHandler}
-               ) => {
+        errors,
+        changeHandler
+    }) => {
 
     const isError = undefined !== errors && touched;
 
